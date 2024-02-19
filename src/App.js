@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router';
 import './App.css';
-
+import { Products } from './pages/Products';
+import { Home } from './pages/Home';
+import Contactus from './pages/Contactus';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Extra from './pages/Extra';
+import { UserProvider } from "./redux/UserContext";
+import { Logout } from './pages/Logout';
+import AdminApp from './admin/AdminApp';
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <UserProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/contactus" element={<Contactus />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Register />} />
+          <Route path='/extra' element={<Extra />} />
+          <Route path='/logout' element={<Logout />}/>
+          <Route path='/admin/*' element={<AdminApp />} />
+
+        </Routes>
+      </UserProvider>
     </div>
   );
 }
