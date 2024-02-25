@@ -17,7 +17,7 @@ const Sidebar = () => {
         <Link to="/">
           <img src={Logo} alt="logo" className="w-36 mb-10" />
         </Link>
-        <Link to="/" className="p-2 flex items-center">
+        <Link to="/admin/profile" className="p-2 flex items-center">
           <img
             src={ProfileIcon}
             alt="profile"
@@ -28,7 +28,7 @@ const Sidebar = () => {
         </Link>
       </div>
       <div className="mb-4 border-b-2 border-white pb-2">
-        <Link to="add-vehicle" className="p-2 flex items-center">
+        <Link to="/admin/add-vehicle" className="p-2 flex items-center">
           <img
             src={AddVehicleIcon}
             alt="add-vehicle"
@@ -39,7 +39,7 @@ const Sidebar = () => {
         </Link>
       </div>
       <div className="mb-4 border-b-2 border-white pb-2">
-        <Link to="your-vehicle" className="p-2 flex items-center">
+        <Link to="/admin/your-vehicle" className="p-2 flex items-center">
           <img
             src={YourVehicleIcon}
             alt="your-vehicle"

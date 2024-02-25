@@ -13,8 +13,6 @@ const Login = () => {
   });
   const { storetokenInLS } = useAuth();
 
-
-
   function ChangeHandler(event) {
     setUser((prev) => (
       {
@@ -27,7 +25,7 @@ const Login = () => {
   const handleLogin = async (e, req, res) => {
     e.preventDefault();
     try {
-      const response = await fetch(URL, {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -37,22 +35,33 @@ const Login = () => {
 
       const res_data = await response.json();
       console.log(res_data);
+      console.log(user);
 
       if (response.ok) {
         storetokenInLS(res_data.token);
-        window.location.reload();
-        if (res_data.redirected) {
-          navigate(res_data.redirected);
-        } else {
-          console.log("error in redirection");
+       // window.location.reload();
+       
+        console.log("login succefull");
+        
+        if (res_data.userType == "renter") {
+        window.location.href = "http://localhost:3000/"; 
+        } else if(res_data.userType == "owner") {
+          window.location.href = "http://localhost:3000/admin/profile";
         }
+
+        // window.location.href = "http://localhost:3000/admin/profile"; 
+        // if (res_data.redirect) {
+        //   navigate(res_data.redirect);
+        // } else {
+        //   console.log("error in redirection");
+        // }
       } else {
-        alert(res_data.extraDetails ? res_data.extraDetails : res_data.message)
+        // alert(res_data.extraDetails ? res_data.extraDetails : res_data.message);
       }
 
       console.log(response);
     } catch (error) {
-      console.log("login me error hee " + error);
+      console.error("Network error:", error);
     }
   };
 

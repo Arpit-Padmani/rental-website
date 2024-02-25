@@ -9,11 +9,11 @@ function App() {
   return (
     <div>
       <Outlet />
-    <Routes>
-          <Route index element={<Profile />} />
+        <Routes>
+          <Route path="profile" element={<Profile />} />
           <Route path="add-vehicle" element={<AddVehicle />} />
           <Route path="logout" element={<Logout/>} />
-    </Routes>
+        </Routes>
     </div>
   );
 }
