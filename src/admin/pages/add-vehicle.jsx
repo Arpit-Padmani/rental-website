@@ -5,7 +5,9 @@ const AddVehicleForm = () => {
   const [formData, setFormData] = useState({
     vehicleName: "",
     vehicleModel: "",
-    photos: "",
+    photo1: null,
+    photo2: null,
+    photo3: null,
     location: "",
     price: "",
     depositPrice: "",
@@ -21,27 +23,19 @@ const AddVehicleForm = () => {
     }));
   };
 
-  const handlePhotosChange = (e) => {
-    const files = e.target.files;
-    console.log(files);
-    
-    if (files.length > 3) {
-      alert("Please select up to 3 photos.");
-      const fileInput = document.getElementById("photos");
-      fileInput.value = "";
-      return;
-    }
-  
-    const selectedPhotos = Array.from(files);
+  const handlePhotoChange = (e, photoNumber) => {
+    const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      photos: selectedPhotos,
+      [`photo${photoNumber}`]: file,
     }));
+    console.log(file);
+    console.log(formData);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    {/*
     const requiredFields = [
       "vehicleName",
       "vehicleModel",
@@ -61,7 +55,7 @@ const AddVehicleForm = () => {
     alert("Added to Database");
     // Add your logic to handle the form submission (e.g., send data to a server)
     console.log(formData);
-    // Reset the form after submission
+    Reset the form after submission
     setFormData({
       vehicleName: "",
       vehicleModel: "",
@@ -70,16 +64,53 @@ const AddVehicleForm = () => {
       depositPrice: "",
       city: "",
       category: "car",
-    });
+  }); **/}
+    console.log(formData);
+    const formdataToSend = new FormData();
+      formdataToSend.append("carDetails", JSON.stringify(formData));
+      formdataToSend.append("photo1", formData.photo1);
+      formdataToSend.append("photo2", formData.photo2);
+      formdataToSend.append("photo3", formData.photo3);
 
-    const fileInput = document.getElementById("photos");
-    fileInput.value = "";
+    try {
+      const response = await fetch('http://localhost:5000/api/add-vehicle', {
+        method: 'POST',
+        body: formdataToSend,
+      });
+      console.log(response);
+      const res_data = await response.json();
+      console.log(res_data);
+
+
+      if (response.ok) {
+        alert('Added to Database');
+        setFormData({
+          vehicleName: '',
+          vehicleModel: '',
+          photo1: null,
+          location: '',
+          price: '',
+          depositPrice: '',
+          city: '',
+          category: 'car',
+        });
+      } else {
+        alert('Failed to add vehicle to the database');
+      }
+    } catch (error) {
+      // console.log(response.json());
+      console.error('Error:', error);
+      alert('Internal server error');
+    }
+
+    // const fileInput = document.getElementById("photos");
+    // fileInput.value = "";
   };
 
   return (
     <div className="flex">
       <Sidebar />
-      <form className="flex-grow max-w-lg mx-auto my-6 p-4 bg-white shadow-md rounded-md">
+      <form className="flex-grow max-w-lg mx-auto my-6 p-4 bg-white shadow-md rounded-md" encType="multipart/form-data">
         <h2 className="text-2xl text-center font-semibold mb-8">Add Vehicle</h2>
 
         <div className="mb-4">
@@ -114,19 +145,49 @@ const AddVehicleForm = () => {
 
         <div className="mb-4">
           <label htmlFor="photos" className="block text-gray-600">
-            Photos (Max 3)
+            Photo 1
           </label>
           <input
             type="file"
-            id="photos"
-            name="photos"
+            id="photo1"
+            name="photo1"
             // accept="image/*"
-            multiple
-            onChange={handlePhotosChange}
+            // multiple
+            onChange={(e) => handlePhotoChange(e, 1)}
             className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
             required
           />
         </div>
+         <div className="mb-4">
+          <label htmlFor="photos" className="block text-gray-600">
+            Photo 2
+          </label>
+          <input
+            type="file"
+            id="photo2"
+            name="photo2"
+            // accept="image/*"
+            // multiple
+            onChange={(e) => handlePhotoChange(e, 2)}
+            className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="photos" className="block text-gray-600">
+            Photo 3
+          </label>
+          <input
+            type="file"
+            id="photo3"
+            name="photo3"
+            // accept="image/*"
+            // multiple
+            onChange={(e) => handlePhotoChange(e, 3)}
+            className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div> 
 
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-600">

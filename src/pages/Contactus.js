@@ -5,7 +5,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { toast } from 'react-hot-toast';
 import logo from '../assest/logo.png'
 import Footer from '../components/Footer';
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 
 
 export default function Contactus() {

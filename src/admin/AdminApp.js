@@ -1,8 +1,10 @@
 import { Outlet, Route, Routes } from "react-router";
 // import Home from "./pages/Home";
 import AddVehicle from "./pages/add-vehicle";
+import YourVehical from "./pages/YourVehical"
 import Profile from "./pages/Profile";
 import { Logout } from "./components/Logout";
+import ViewVehicle from "./pages/ViewVehicle";
 
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
         <Routes>
           <Route path="profile" element={<Profile />} />
           <Route path="add-vehicle" element={<AddVehicle />} />
+          <Route path="your-vehicle" element={<YourVehical />} />
+          <Route path="vehicleDetail/:id" element={<ViewVehicle />} />
           <Route path="logout" element={<Logout/>} />
         </Routes>
     </div>

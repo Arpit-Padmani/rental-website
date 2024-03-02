@@ -75,6 +75,7 @@ const Extra = () => {
         },
         body: JSON.stringify(ExtraDetails),
       });
+      
       const res_data = await response.json();
       console.log(res_data);
 
@@ -82,7 +83,11 @@ const Extra = () => {
         storetokenInLS(res_data.token);
         // console.log("res_data "+res_data);
 
-        navigate('/');
+        if (res_data.userType == "renter") {
+          window.location.href = "http://localhost:3000/"; 
+          } else if(res_data.userType == "owner") {
+            window.location.href = "http://localhost:3000/admin/profile";
+          }
       }
       else {
         alert(res_data.extraDetails ? res_data.extraDetails : res_data.message);

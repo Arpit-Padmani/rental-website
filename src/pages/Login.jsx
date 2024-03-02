@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useAuth } from '../redux/auth';
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
 
@@ -39,6 +40,7 @@ const Login = () => {
 
       if (response.ok) {
         storetokenInLS(res_data.token);
+        toast.success("Login Sucessfully ");
        // window.location.reload();
        
         console.log("login succefull");
@@ -56,6 +58,8 @@ const Login = () => {
         //   console.log("error in redirection");
         // }
       } else {
+        toast.error("Login Faild !! ");
+
         // alert(res_data.extraDetails ? res_data.extraDetails : res_data.message);
       }
 
