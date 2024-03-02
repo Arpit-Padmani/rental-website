@@ -84,6 +84,7 @@ const Profile = () => {
             if (response.ok) {
                 toast.success("Updated Successfully");
                 console.log("updated successfully done");
+                setIsUpdateMode(false);
                 // Handle success
             } else {
                 // Handle error

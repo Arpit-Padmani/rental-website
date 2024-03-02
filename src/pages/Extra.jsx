@@ -62,7 +62,7 @@ const Extra = () => {
     }));
   }, [state.name, state.email, state.password]);
 
-  // console.log(ExtraDetails);
+  console.log(ExtraDetails);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,11 +77,11 @@ const Extra = () => {
       });
       
       const res_data = await response.json();
-      console.log(res_data);
+      // console.log(res_data);
 
       if (response.ok) {
         storetokenInLS(res_data.token);
-        // console.log("res_data "+res_data);
+        console.log("res_data "+res_data);
 
         if (res_data.userType == "renter") {
           window.location.href = "http://localhost:3000/"; 
@@ -94,7 +94,7 @@ const Extra = () => {
       }
       console.log(response);
     } catch (error) {
-      console.log("register : "+error);
+      console.log(error);
     }
 
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
+import { toast } from 'react-hot-toast';
 
 const AddVehicleForm = () => {
   const [formData, setFormData] = useState({
@@ -35,36 +36,6 @@ const AddVehicleForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    {/*
-    const requiredFields = [
-      "vehicleName",
-      "vehicleModel",
-      "photos",
-      "location",
-      "price",
-      "depositPrice",
-      "city",
-      "category",
-    ];
-    const emptyFields = requiredFields.filter((field) => !formData[field]);
-
-    if (emptyFields.length > 0) {
-      alert(`Please fill in all required fields: ${emptyFields.join(", ")}`);
-      return;
-    }
-    alert("Added to Database");
-    // Add your logic to handle the form submission (e.g., send data to a server)
-    console.log(formData);
-    Reset the form after submission
-    setFormData({
-      vehicleName: "",
-      vehicleModel: "",
-      location: "",
-      price: "",
-      depositPrice: "",
-      city: "",
-      category: "car",
-  }); **/}
     console.log(formData);
     const formdataToSend = new FormData();
       formdataToSend.append("carDetails", JSON.stringify(formData));
@@ -81,9 +52,8 @@ const AddVehicleForm = () => {
       const res_data = await response.json();
       console.log(res_data);
 
-
       if (response.ok) {
-        alert('Added to Database');
+        toast.success("Vehicle details added successfully ",{position:"top-right"});
         setFormData({
           vehicleName: '',
           vehicleModel: '',
@@ -95,16 +65,13 @@ const AddVehicleForm = () => {
           category: 'car',
         });
       } else {
-        alert('Failed to add vehicle to the database');
+        toast.error("Failed to add vehicle detail ",{position:"top-right"});
+        // alert('Failed to add vehicle to the database');
       }
     } catch (error) {
-      // console.log(response.json());
+      toast.error("Failed to add vehicle detail ",{position:"top-right"});
       console.error('Error:', error);
-      alert('Internal server error');
     }
-
-    // const fileInput = document.getElementById("photos");
-    // fileInput.value = "";
   };
 
   return (
