@@ -5,6 +5,7 @@ import YourVehical from "./pages/YourVehical"
 import Profile from "./pages/Profile";
 import { Logout } from "./components/Logout";
 import ViewVehicle from "./pages/ViewVehicle";
+import UpdateVehicle from "./pages/updateVehicle";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="add-vehicle" element={<AddVehicle />} />
           <Route path="your-vehicle" element={<YourVehical />} />
           <Route path="vehicleDetail/:id" element={<ViewVehicle />} />
+          <Route path="updateVehical/:id" element={<UpdateVehicle />} />
           <Route path="logout" element={<Logout/>} />
         </Routes>
     </div>

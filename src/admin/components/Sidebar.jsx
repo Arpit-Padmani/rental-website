@@ -5,6 +5,7 @@ import ProfileIcon from "../assest/profile.png";
 import AddVehicleIcon from "../assest/add.png";
 import YourVehicleIcon from "../assest/vehicle.png";
 import LogoutIcon from "../assest/logout.png";
+import toast from "react-hot-toast";
 
 const iconStyle = {
   filter: "invert(1)",
@@ -51,7 +52,7 @@ const Sidebar = () => {
       </div>
       {/* <div className="flex-grow"></div> */}
       <div>
-        <Link to="/logout" className="p-2 flex items-center">
+        <Link to="/logout" className="p-2 flex items-center" onClick={()=>{toast.success("Logot Successfully")}}>
           <img
             src={LogoutIcon}
             alt="logout"
@@ -60,6 +61,12 @@ const Sidebar = () => {
           />
           Logout
         </Link>
+      </div>
+      <div className="flex-grow"></div>
+      <div>
+        <p className="p-2 flex items-center hover:cursor-pointer">
+          @copyrights RentEasy.com
+        </p>
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ import { useAuth } from '../../redux/auth';
 import { toast } from 'react-hot-toast';
 
 export const Logout = () => {
-    const {LogoutUser} =  useAuth
-    toast.success("Logout Sucessfully ");
+    const {LogoutUser} =  useAuth();
+    // toast.success("Logout Sucessfully ");
 
     useEffect(()=>{
         LogoutUser();

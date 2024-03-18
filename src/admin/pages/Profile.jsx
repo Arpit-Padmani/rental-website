@@ -29,7 +29,7 @@ const Profile = () => {
 
     const [userData, setUserData] = useState(true);
     const { user, authorizationToken } = useAuth();
-    console.log(authorizationToken);
+    // console.log(authorizationToken);
     console.log(user);
     useEffect(() => {
         if (user && userData) {
@@ -46,7 +46,7 @@ const Profile = () => {
             setUserData(true);
         }
     }, [user, setUserData]);
-    console.log(userdata);
+    // console.log(userdata);
 
 
     // console.log(id);
@@ -54,7 +54,7 @@ const Profile = () => {
     // const [userData, setUserData] = useState(initialUserData);
     const [isUpdateMode, setIsUpdateMode] = useState(false);
     const [updatedUserData, setUpdatedUserData] = useState(userData);
-    console.log(userdata);
+    // console.log(userdata);
     const handleUpdateClick = () => {
         setIsUpdateMode(true);
         // setUpdatedUserData(userData);
@@ -64,13 +64,14 @@ const Profile = () => {
         setIsUpdateMode(false);
     };
 
+    // console.log(userdata);
     console.log(userdata);
 
     const handleSubmit = async (e, req, res) => {
         e.preventDefault();
         try {
-            console.log(user.userData._id);
-            console.log('Request Payload:', JSON.stringify(userData));
+            // console.log(user.userData._id);
+            // console.log('Request Payload:', JSON.stringify(userData));
             const response = await fetch(`http://localhost:5000/api/auth/user/update/${user.userData._id}`, {
                 method: "PATCH",
                 headers: {
@@ -80,19 +81,23 @@ const Profile = () => {
                 body: JSON.stringify(userdata),
             });
             console.log(response);
+            const res_data = await response.json();
+            console.log(res_data);
 
             if (response.ok) {
-                toast.success("Updated Successfully");
-                console.log("updated successfully done");
+                toast.success("Updated Successfully", { position: "top-right" });
+                // console.log("updated successfully done");
                 setIsUpdateMode(false);
                 // Handle success
             } else {
+                toast.error("Error in updating data", { position: "top-right" })
                 // Handle error
-                const errorData = await response.json();
-                console.error('Error:', errorData);
+                // const errorData = await response.json();
+                console.error('Error:');
             }
 
         } catch (error) {
+            toast.error("Error in updating data", { position: "top-right" })
             console.error(error);
         }
     };
@@ -111,109 +116,13 @@ const Profile = () => {
         }));
     };
 
+
     return (
         <div className="flex">
             <Sidebar />
             <div className="flex-grow max-w-4xl mx-auto my-6 p-4 bg-white shadow-lg rounded-md">
                 <h2 className="text-2xl text-center font-semibold mb-6">Profile</h2>
                 <div className="bg-gray-100 p-4 rounded-md mb-6">
-                    {/* <>
-                        <div className="mb-6">
-                            <label htmlFor="name">Name: </label>
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                value={userdata.name}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label htmlFor="email">Email: </label>
-                            <input
-                                type="text"
-                                id="email"
-                                name="email"
-                                value={userdata.email}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label htmlFor="phoneNo">phoneNo No: </label>
-                            <input
-                                type="text"
-                                id="phoneNoNo"
-                                name="phoneNoNo"
-                                value={userdata.phoneNo}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label htmlFor="birthdate">Birthdate: </label>
-                            <input
-                                type="date"
-                                id="birthdate"
-                                name="birthdate"
-                                value={userdata.birthdate}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label htmlFor="state">State: </label>
-                            <input
-                                type="text"
-                                id="state"
-                                name="state"
-                                value={userdata.state}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label htmlFor="city">City: </label>
-                            <input
-                                type="text"
-                                id="city"
-                                name="city"
-                                value={userdata.city}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label htmlFor="address">Address: </label>
-                            <input
-                                type="text"
-                                id="address"
-                                name="address"
-                                value={userdata.address}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="mb-12">
-                            <label htmlFor="Occupation">Occupation: </label>
-                            <input
-                                type="text"
-                                id="Occupation"
-                                name="Occupation"
-                                value={userdata.Occupation}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                        <div className="flex justify-center">
-                            <button
-                                className="bg-green-500 text-white py-2 px-4 rounded-md mr-2"
-                            // onClick={handleSaveUpdate}
-                            >
-                                Save
-                            </button>
-                            <button
-                                className="bg-red-500 text-white py-2 px-4 rounded-md"
-                            // onClick={handleCancelUpdate}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </> */}
-
                     {isUpdateMode ? (
                         <form
                             onSubmit={handleSubmit}

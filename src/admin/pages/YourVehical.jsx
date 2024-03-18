@@ -1,39 +1,29 @@
-import React, { useState } from "react";
-import car from "../assest/car1.jpeg";
-import bike from "../assest/bike1.jpeg";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../redux/auth";
 
 const YourVehical = () => {
-  // Sample data for vehicles
-  const [vehicles] = useState([
-    {
-      id: 1,
-      name: "Range Rover",
-      model: "Velar",
-      image: car,
-    },
-    {
-      id: 2,
-      name: "Pulsar",
-      model: "220",
-      image: bike,
-    },
-    {
-      id: 3,
-      name: "Range Rover",
-      model: "Velar",
-      image: car,
-    },
-    {
-      id: 4,
-      name: "Pulsar",
-      model: "220",
-      image: bike,
-    },
-    // Add more vehicles as needed
-  ]);
+  const [products, setProducts] = useState([]);
 
+  const { user } = useAuth();
+  const userId = user?.userData?._id;
+  console.log(userId);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/detail/getCarDetails')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);  // Log the data structure
+
+        // Assuming data is an array of objects with a userId property
+        const userProducts = data.filter(product => product.userId === userId);
+
+        setProducts(userProducts);
+      })
+      .catch(error => console.error('Error fetching products:', error));
+  }, [userId]);
+  console.log(products);
   return (
     <div className="flex">
       <Sidebar />
@@ -41,34 +31,50 @@ const YourVehical = () => {
         <h2 className="text-3xl text-center font-semibold mb-14 text-black">
           Your Vehicle
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4">
-          {vehicles.map((vehicle) => (
-            <div key={vehicle.id} className="flex-shrink-0">
-              <div className="bg-white flex shadow-md w-1/2 mb-4 p-4 rounded-md overflow-hidden mx-auto">
-                <img
-                  src={vehicle.image}
-                  alt={`${vehicle.name} ${vehicle.model}`}
-                  className="w-80 h-48 object-cover rounded-md"
-                />
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold mb-2">
-                    Name: {vehicle.name}
-                  </h2>
-                  <h2 className="text-xl font-semibold mb-14">
-                    Model: {vehicle.model}
-                  </h2>
-                  <div className="flex">
-                    <Link to={`/admin/vehicleDetail/${vehicle.id}`} className="bg-black text-white py-2 px-5 mr-10 rounded-md hover:bg-gray-700 focus:outline-none">
-                      View Vehicle
-                    </Link>
-                    <button className="bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none">
-                      View Vehicle
-                    </button>
+
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 ">
+          {
+            products.length < 1 ? (
+              <div className="flex items-center justify-center h-[450px]">
+              <p className="text-4xl text-gray-600">No vehicles found.</p>
+            </div>
+            ) : (
+              products.map(product => (
+                <div key={product.id} className="bg-white flex flex-col w-fit shadow-lg mx-[50px] my-[0px] py-[15px] px-[24px]
+                items-center justify-center rounded-md overflow-hidden ">
+                  <div >
+                    <div>
+                      <img className="w-80 h-48 mt-5 object-cover rounded-md items-center"
+                        src={`http://localhost:5000/uploads/${product.photo1}`}
+                        alt={product.vehicleName} />
+
+                    </div>
+                    <div className="p-4 ">
+                      <h2 className="text-xl font-semibold mb-2">
+                        Name: {product.vehicleName}
+                      </h2>
+                      <h2 className="text-xl font-semibold mb-2">
+                        Model: {product.vehicleModel}
+                      </h2>
+                      <h2 className="text-xl font-semibold mb-2">
+                        Fuel Type: {product.fuelType}
+                      </h2>
+                      <h2 className="text-xl font-semibold mb-8">
+                        Transmission Type: {product.transmissionType}
+                      </h2>
+
+                      <div className="flex">
+                        <Link to={`/admin/vehicleDetail/${product._id}`} className="bg-black text-white py-2 px-5 mr-10 rounded-md hover:bg-gray-700 focus:outline-none">
+                          View Vehicle
+                        </Link>
+                        <button className="bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none">
+                          View Vehicle
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              )))}
         </div>
       </div>
     </div>

@@ -42,21 +42,15 @@ const Login = () => {
         storetokenInLS(res_data.token);
         toast.success("Login Sucessfully ");
        // window.location.reload();
+        console.log(res_data);
        
         console.log("login succefull");
         
-        if (res_data.userType == "renter") {
+        if (res_data.renterType == "renter") {
         window.location.href = "http://localhost:3000/"; 
-        } else if(res_data.userType == "owner") {
+        } else if(res_data.renterType == "owner") {
           window.location.href = "http://localhost:3000/admin/profile";
         }
-
-        // window.location.href = "http://localhost:3000/admin/profile"; 
-        // if (res_data.redirect) {
-        //   navigate(res_data.redirect);
-        // } else {
-        //   console.log("error in redirection");
-        // }
       } else {
         toast.error("Login Faild !! ");
 
@@ -119,6 +113,7 @@ const Login = () => {
                 }
               </span>
             </div>
+            
             <button
               type="submit"
               className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800">

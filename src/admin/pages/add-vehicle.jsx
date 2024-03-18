@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { toast } from 'react-hot-toast';
+import { useAuth } from "../../redux/auth";
 
 const AddVehicleForm = () => {
   const [formData, setFormData] = useState({
     vehicleName: "",
     vehicleModel: "",
+    fuelType: 'petrol',
+    transmissionType: 'automatic',
+    hasGPS: '',
+    seatingCapacity: '',
+    modelYear: '',
     photo1: null,
     photo2: null,
     photo3: null,
@@ -14,7 +20,18 @@ const AddVehicleForm = () => {
     depositPrice: "",
     city: "",
     category: "car",
+    userId: ""
   });
+
+  const { user } = useAuth();
+  useEffect(() => {
+    console.log("User:", user);
+    console.log("Setting userId:", user.userData._id);
+    setFormData((prevData) => ({
+      ...prevData,
+      userId: user.userData._id
+    }));
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,17 +48,40 @@ const AddVehicleForm = () => {
       [`photo${photoNumber}`]: file,
     }));
     console.log(file);
-    console.log(formData);
   };
+
+  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+    if (
+      !formData.vehicleName ||
+      !formData.vehicleModel ||
+      !formData.fuelType ||
+      !formData.hasGPS ||
+      !formData.modelYear ||
+      !formData.seatingCapacity ||
+      !formData.transmissionType ||
+      !formData.photo1 ||
+      !formData.photo2 ||
+      !formData.photo3 ||
+      !formData.location ||
+      !formData.price ||
+      !formData.depositPrice ||
+      !formData.city ||
+      !formData.category
+    ) {
+      toast.error("Please fill in all required fields and select photo", { position: "top-right" });
+      return;
+    }
+
     const formdataToSend = new FormData();
-      formdataToSend.append("carDetails", JSON.stringify(formData));
-      formdataToSend.append("photo1", formData.photo1);
-      formdataToSend.append("photo2", formData.photo2);
-      formdataToSend.append("photo3", formData.photo3);
+    formdataToSend.append("carDetails", JSON.stringify(formData));
+    formdataToSend.append("photo1", formData.photo1);
+    formdataToSend.append("photo2", formData.photo2);
+    formdataToSend.append("photo3", formData.photo3);
+    console.log(formdataToSend);
 
     try {
       const response = await fetch('http://localhost:5000/api/add-vehicle', {
@@ -53,10 +93,15 @@ const AddVehicleForm = () => {
       console.log(res_data);
 
       if (response.ok) {
-        toast.success("Vehicle details added successfully ",{position:"top-right"});
+        toast.success("Vehicle details added successfully ", { position: "top-right" });
         setFormData({
           vehicleName: '',
           vehicleModel: '',
+          fuelType: '',
+          transmissionType: '',
+          hasGPS: '',
+          seatingCapacity: '',
+          modelYear: '',
           photo1: null,
           location: '',
           price: '',
@@ -65,11 +110,10 @@ const AddVehicleForm = () => {
           category: 'car',
         });
       } else {
-        toast.error("Failed to add vehicle detail ",{position:"top-right"});
-        // alert('Failed to add vehicle to the database');
+        toast.error("Failed to add vehicle detail ", { position: "top-right" });
       }
     } catch (error) {
-      toast.error("Failed to add vehicle detail ",{position:"top-right"});
+      toast.error("Failed to add vehicle detail ", { position: "top-right" });
       console.error('Error:', error);
     }
   };
@@ -110,7 +154,109 @@ const AddVehicleForm = () => {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
+          <label htmlFor="fuelType" className="block text-gray-700">
+            Fuel Type:
+          </label>
+          <select
+            id="fuelType"
+            name="fuelType"
+            value={formData.fuelType}
+            onChange={handleChange}
+            className="w-full  p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+            required
+          >
+            <option disabled > setlect Fuel Type</option>
+            <option value="petrol">Petrol</option>
+            <option value="gasoline">Gasoline</option>
+            <option value="diesel">Diesel</option>
+            <option value="electric">Electric</option>
+          </select>
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="transmissionType" className="block text-gray-700">
+            Transmission Type:
+          </label>
+          <select
+            id="transmissionType"
+            name="transmissionType"
+            value={formData.transmissionType}
+            onChange={handleChange}
+            className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+            required
+          >
+            <option value="automatic">Automatic</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="hasGPS" className="block text-gray-700">
+            GPS Navigation:
+          </label>
+          <div className="flex items-center">
+            <label htmlFor="hasGPSYes" className="mr-2 mt-3">
+              <input
+                type="radio"
+                id="hasGPSYes"
+                name="hasGPS"
+                value="yes"
+                checked={formData.hasGPS === "yes"}
+                onChange={handleChange}
+                className="mr-1"
+              />
+              Yes
+            </label>
+            <label htmlFor="hasGPSNo" className="mt-3">
+              <input
+                type="radio"
+                id="hasGPSNo"
+                name="hasGPS"
+                value="no"
+                checked={formData.hasGPS === "no"}
+                onChange={handleChange}
+                className="mr-1"
+              />
+              No
+            </label>
+          </div>
+        </div>
+
+
+        <div className="mb-6">
+          <label htmlFor="seatingCapacity" className="block text-gray-700">
+            Seating Capacity:
+          </label>
+          <input
+            type="number"
+            id="seatingCapacity"
+            name="seatingCapacity"
+            value={formData.seatingCapacity}
+            onChange={handleChange}
+            className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+            placeholder="Enter seating capacity"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="modelYear" className="block text-gray-700">
+            Model Year
+          </label>
+          <input
+            type="number"
+            id="modelYear"
+            name="modelYear"
+            value={formData.modelYear}
+            onChange={handleChange}
+            className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+            placeholder="Enter model year"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
           <label htmlFor="photos" className="block text-gray-600">
             Photo 1
           </label>
@@ -125,7 +271,7 @@ const AddVehicleForm = () => {
             required
           />
         </div>
-         <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="photos" className="block text-gray-600">
             Photo 2
           </label>
@@ -140,7 +286,7 @@ const AddVehicleForm = () => {
             required
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="photos" className="block text-gray-600">
             Photo 3
           </label>
@@ -154,9 +300,9 @@ const AddVehicleForm = () => {
             className="w-full p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
             required
           />
-        </div> 
+        </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="location" className="block text-gray-600">
             Location
           </label>
@@ -171,7 +317,7 @@ const AddVehicleForm = () => {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="price" className="block text-gray-600">
             Price
           </label>
@@ -186,7 +332,7 @@ const AddVehicleForm = () => {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="depositPrice" className="block text-gray-600">
             Deposit Price
           </label>
@@ -201,7 +347,7 @@ const AddVehicleForm = () => {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="city" className="block text-gray-600">
             City
           </label>
@@ -216,7 +362,7 @@ const AddVehicleForm = () => {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="category" className="block text-gray-600">
             Category
           </label>

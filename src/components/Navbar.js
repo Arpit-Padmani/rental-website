@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import logo from '../assest/logo.png'
 import { useAuth } from '../redux/auth';
+import toast from 'react-hot-toast';
 
 export const Navbar = () => {
     const { isloggedIn } = useAuth();
@@ -29,10 +30,10 @@ export const Navbar = () => {
                         (
                             <>
                                 <Link to="/logout">
-                                    <button className='border py-1 px-4 rounded-md '>Logout</button>
+                                    <button className='border py-1 px-4 rounded-md ' onClick={()=>{toast.success("Logot Successfully")}}>Logout</button>
                                 </Link>
 
-                                <Link>
+                                <Link to="/profile">
                                     <button className='border py-1 px-4 rounded-md '>Dashboard</button>
                                 </Link>
                             </>

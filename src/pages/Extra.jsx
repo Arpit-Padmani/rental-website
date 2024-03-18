@@ -77,7 +77,7 @@ const Extra = () => {
       });
       
       const res_data = await response.json();
-      // console.log(res_data);
+      console.log(res_data);
 
       if (response.ok) {
         storetokenInLS(res_data.token);

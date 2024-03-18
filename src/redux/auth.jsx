@@ -30,8 +30,11 @@ export const AuthProvider = ({ children }) => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log(data.userData);
+                console.log(data);
                 setUser(data);
+            }else{
+                console.log(token);
+                console.log("error");
             }
         } catch (error) {
             console.log("error in auth.js " + error);
