@@ -112,6 +112,7 @@ const Login = () => {
                   ShowPassword ? (<AiOutlineEyeInvisible fontSize={24} fill='#afb2bf' />) : (<AiOutlineEye fontSize={24} fill='#afb2bf' />)
                 }
               </span>
+              <Link to="/forgotPassword" className='pl-[150px] mt-6 hover:text-[17px] transition duration-300'>Forgot Password ?</Link>
             </div>
             
             <button

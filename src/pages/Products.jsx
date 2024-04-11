@@ -20,11 +20,10 @@ export const Products = () => {
     fetch('http://localhost:5000/api/detail/getCarDetails')
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        setLoading(false);
         setProducts(data);
       })
       .catch(error => console.error('Error fetching products:', error));
-      setLoading(false);
   }, []);
   console.log(products);
 
@@ -38,6 +37,11 @@ export const Products = () => {
     const matchCity = selectedCity === "all" || product.city === selectedCity;
     return matchSearchTerm && matchCategory && matchCity;
   });
+  
+  // console.log(filteredProducts);
+  // if ( filteredProducts <= 0) {
+  //   return <div>Not Found !!</div>;
+  // }
 
   return (
     <div>
@@ -53,7 +57,6 @@ export const Products = () => {
               <option value="all">All Categories</option>
               <option value="car">Car</option>
               <option value="bike">Bike</option>
-              {/* Add more categories as needed */}
             </select>
 
 
@@ -66,11 +69,9 @@ export const Products = () => {
               <option value="Surat">Surat</option>
               <option value="Rajkot">Rajkot</option>
               <option value="Ahemadabad">Ahmedabad</option>
-              {/* Add more cities as needed */}
             </select>
           </div>
 
-          {/* Search Bar */}
           <input
             type="text"
             placeholder="Search products..."
@@ -81,7 +82,6 @@ export const Products = () => {
         </div>
 
         <hr className="my-6 mt-10 mb-12" />
-        {/* Product Catalog */}
         {loading ? (
           <div><Spinner /></div>
         ) : (
@@ -96,7 +96,6 @@ export const Products = () => {
                 <h3 key={product.id} className="text-xl font-semibold mb-2">{product.vehicleName} - {product.vehicleModel}</h3>
                 <div key={product.id} className="text-gray-600  flex"><p className="text-black font-semibold mr-1">Price:  </p> {product.price}/ day</div>
                 <div key={product.id} className="text-gray-600 mb-6 flex"><p className="text-black font-semibold mr-1">City:  </p> {product.city}</div>
-                {/* Add more details as needed */}
                 <Link ey={product.id} to={`/productdetail/${product._id}`} className="block w-full bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none text-center">
                   View Details
                 </Link>
@@ -105,7 +104,7 @@ export const Products = () => {
           </div>
         )}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

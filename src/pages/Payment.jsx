@@ -5,8 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 const Payment = () => {
   // Sample booking details
 
-  const [checkout,setCheckout] = useState([]);
+  const [checkout, setCheckout] = useState([]);
   const [products, setProducts] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+
   const sampleBookingDetails = {
     depositPrice: 4000,
     rentPrice: 5000,
@@ -26,8 +29,8 @@ const Payment = () => {
       .catch(error => console.error('Error fetching products:', error));
   }, []);
   console.log(checkout);
-  
-  const productId=checkout.carId;
+
+  const productId = checkout.carId;
   useEffect(() => {
     fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${productId}`)
       .then(response => response.json())
@@ -44,7 +47,9 @@ const Payment = () => {
 
   // Calculate total amount
   const calculateTotal = () => {
-    return products.depositPrice + totalRent + taxAmount;
+    const totalBeforeDiscount = products.depositPrice + totalRent + taxAmount;
+    const discountedAmount = totalBeforeDiscount * discount;
+    return totalBeforeDiscount - discountedAmount;
   };
 
   const navigate = useNavigate();
@@ -97,6 +102,15 @@ const Payment = () => {
     }
   };
 
+  const applyCoupon = () => {
+    if (couponCode === "CODE10") {
+      setDiscount(0.25); // 10% discount
+    } else {
+      console.log("Invalid coupon code");
+    }
+  };
+
+
   return (
     <div>
       <Navbar />
@@ -125,8 +139,51 @@ const Payment = () => {
               <p className="font-semibold">₹{calculateTotal()}</p>
             </div>
           </div>
+
+
+          {/* <div className="flex items-center mb-4">
+            <input
+              type="text"
+              placeholder="Enter Coupon Code"
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none flex-1 mr-2"
+              onChange={(e) => setCouponCode(e.target.value)}
+            />
+            <button
+              className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+              onClick={applyCoupon}
+            >
+              Apply
+            </button>
+          </div> */}
+
+
+          <div class="container bg-white text-black p-8 rounded-lg shadow-lg max-w-md mx-auto">
+            <div class="text-3xl font-bold mb-4">Special Offer!</div>
+            <div class="text-lg mb-4">Get <span class="text-yellow-400 font-bold">25% OFF</span> your  purchase!</div>
+            <div class="text-base mb-4">Enter coupon code:</div>
+            <div class=" text-white rounded-lg  flex items-center justify-between">
+              <input
+              type="text" 
+              class="text-2xl border-black border-2 rounded-lg pl-1 font-semibold text-black"
+              onChange={(e) => setCouponCode(e.target.value)} />
+              <button 
+              class="bg-blue-800 text-white px-3 py-1  rounded hover:bg-blue-600 focus:outline-none 
+              focus:ring-2 focus:ring-blue-500"
+              onClick={applyCoupon}>
+                Apply
+                </button>
+            </div>
+            <div class="text-sm mt-4">
+              <p>Valid until <span class="font-semibold">December 31, 2023</span></p>
+              <p>Terms and conditions apply.</p>
+            </div>
+          </div>
+
+
+
+
           {/* Payment Method Selection */}
-          <div className="bg-white p-4 rounded-md shadow-md">
+          <div className="bg-white p-4 mt-6 rounded-md shadow-md">
             <p className="text-xl font-semibold mb-4">Select Payment Method:</p>
             <div className="flex flex-col gap-2">
               <div className="flex items-center">

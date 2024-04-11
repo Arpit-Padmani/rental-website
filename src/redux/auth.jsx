@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
                 console.log(data);
                 setUser(data);
             }else{
-                console.log(token);
+                // console.log(token);
                 console.log("error");
             }
         } catch (error) {
@@ -42,8 +42,10 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        userAuthentication();
-    }, [])
+        if (isloggedIn) {
+            userAuthentication();
+        }
+    }, [isloggedIn]);
 
     return <AuthContext.Provider value={{ storetokenInLS, LogoutUser, isloggedIn , user , authorizationToken }}>
         {children}

@@ -12,6 +12,8 @@ import Profile from './pages/Profile';
 import { ProductDetails } from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path="/checkout/:id" element={<Checkout />} />
           <Route path="/payment/:id" element={<Payment />} />
           <Route path="/contactus" element={<Contactus />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword/:id/:token" element={<ResetPassword />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Register />} />
           <Route path='/extra' element={<Extra />} />

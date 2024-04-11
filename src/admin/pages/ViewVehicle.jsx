@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Spinner from "../components/Spinner";
 
 const ViewVehicle = () => {
 
@@ -8,14 +9,17 @@ const ViewVehicle = () => {
   const [photos, setPhotos] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
   console.log(id);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${id}`)
       .then(response => response.json())
       .then(data => {
+        setLoading(false);
         console.log(data); // Optional: Log the data received from the server
         setProducts(data);
         setPhotos([data.photo1, data.photo2, data.photo3].filter(Boolean));
@@ -51,8 +55,8 @@ const ViewVehicle = () => {
     }
   }
 
-  if (!products) {
-    return <div key={id}>Loading...</div>;
+  if (loading) {
+    return <div key={id}><Spinner/></div>;
   }
 
   const handleImageClick = (index) => {
@@ -71,83 +75,86 @@ const ViewVehicle = () => {
         <p className="text-4xl font-semibold text-center">Vehicle Detail</p>
         <hr className="my-4" />
         <div className="mt-8">
-          <button
+          {/* <button
             onClick={goBack}
             className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none"
           >
             &#8592; Back
-          </button>
+          </button> */}
         </div>
-        <div className="flex mt-32 items-center justify-center ml-28">
-          <div className="w-1/2 pr-4  relative">
-            <img
-              src={`http://localhost:5000/uploads/${photos[currentImageIndex]}`}
-              alt={`${products.name} ${products.model}`}
-              className="w-full h-auto object-cover rounded-md"
-            />
-            {photoslength > 1 && (
-              <div className="absolute left-1/2 transform -translate-x-1/2 mb-2">
-                {photos.map((photo, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleImageClick(index)}
-                    className={`w-3 h-3 mx-1 rounded-full ${currentImageIndex === index ? "bg-black" : "bg-gray-300"
-                      }`}
-                  ></button>
-                ))}
-              </div>
-            )}
+        {loading ?(
+          <div><Spinner /></div>
+        ):(<div className="flex mt-32 items-center justify-center ml-28">
+        <div className="w-1/2 pr-4  relative">
+          <img
+            src={`http://localhost:5000/uploads/${photos[currentImageIndex]}`}
+            alt={`${products.name} ${products.model}`}
+            className="w-full h-auto object-cover rounded-md"
+          />
+          {photoslength > 1 && (
+            <div className="absolute left-1/2 transform -translate-x-1/2 mb-2">
+              {photos.map((photo, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleImageClick(index)}
+                  className={`w-3 h-3 mx-1 rounded-full ${currentImageIndex === index ? "bg-black" : "bg-gray-300"
+                    }`}
+                ></button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="w-1/2 pl-16">
+          <h2 className="text-3xl font-semibold mb-8">{`${products.vehicleName} ${products.vehicleModel}`}</h2>
+          <div className="text-lg">
+            <p className="mb-4">
+              <strong>Vehical Model : </strong> {products.vehicleModel}
+            </p>
+            <p className="mb-4">
+              <strong>Fule Type:</strong> {products.fuelType}
+            </p>
+            <p className="mb-4">
+              <strong>Transmission Type:</strong> {products.transmissionType}
+            </p>
+            <p className="mb-4">
+              <strong>GPS Navigation : </strong> {products.hasGPS}
+            </p>
+            <p className="mb-4">
+              <strong>Seating Capacity : </strong> {products.seatingCapacity}
+            </p>
+            <p className="mb-4">
+              <strong>Vehicle Model Year : </strong> {products.modelYear}
+            </p>
+            <p className="mb-4">
+              <strong>Price : </strong> {products.price}
+            </p>
+            <p className="mb-4">
+              <strong>Deposit Price : </strong> {products.depositPrice}
+            </p>
+            <p className="mb-4">
+              <strong>Location : </strong> {products.location}
+            </p>
+            <p className="mb-4">
+              <strong>City : </strong> {products.city}
+            </p>
           </div>
-          <div className="w-1/2 pl-16">
-            <h2 className="text-3xl font-semibold mb-8">{`${products.vehicleName} ${products.vehicleModel}`}</h2>
-            <div className="text-lg">
-              <p className="mb-4">
-                <strong>Vehical Model : </strong> {products.vehicleModel}
-              </p>
-              <p className="mb-4">
-                <strong>Fule Type:</strong> {products.fuelType}
-              </p>
-              <p className="mb-4">
-                <strong>Transmission Type:</strong> {products.transmissionType}
-              </p>
-              <p className="mb-4">
-                <strong>GPS Navigation : </strong> {products.hasGPS}
-              </p>
-              <p className="mb-4">
-                <strong>Seating Capacity : </strong> {products.seatingCapacity}
-              </p>
-              <p className="mb-4">
-                <strong>Vehicle Model Year : </strong> {products.modelYear}
-              </p>
-              <p className="mb-4">
-                <strong>Price : </strong> {products.price}
-              </p>
-              <p className="mb-4">
-                <strong>Deposit Price : </strong> {products.depositPrice}
-              </p>
-              <p className="mb-4">
-                <strong>Location : </strong> {products.location}
-              </p>
-              <p className="mb-4">
-                <strong>City : </strong> {products.city}
-              </p>
-            </div>
-            <div className="flex mt-20">
-              <Link
-                to={`/admin/updateVehical/${products._id}`}
-                className="bg-black text-white py-2 px-5 mr-10 rounded-md hover:bg-gray-700 focus:outline-none"
-              >
-                Update
-              </Link>
-              <button
-                onClick={deleteProduct}
-                className="bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none"
-              >
-                Delete
-              </button>
-            </div>
+          <div className="flex mt-20">
+            <Link
+              to={`/admin/updateVehical/${products._id}`}
+              className="bg-black text-white py-2 px-5 mr-10 rounded-md hover:bg-gray-700 focus:outline-none"
+            >
+              Update
+            </Link>
+            <button
+              onClick={deleteProduct}
+              className="bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none"
+            >
+              Delete
+            </button>
           </div>
         </div>
+      </div>)}
+        
       </div>
     </div>
   );

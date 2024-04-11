@@ -13,7 +13,7 @@ function App() {
     <div>
       <Outlet />
         <Routes>
-          <Route path="profile" element={<Profile />} />
+          <Route authorisedUsers={['Admin']} path="profile" element={<Profile />} />
           <Route path="add-vehicle" element={<AddVehicle />} />
           <Route path="your-vehicle" element={<YourVehical />} />
           <Route path="vehicleDetail/:id" element={<ViewVehicle />} />
