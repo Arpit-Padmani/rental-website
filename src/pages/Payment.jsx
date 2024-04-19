@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../redux/auth";
+import logo from "../assest/logo.png"
 
 const Payment = () => {
   // Sample booking details
@@ -9,6 +11,22 @@ const Payment = () => {
   const [products, setProducts] = useState([]);
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [selectedAmount, setSelectedAmount] = useState(0);
+  const [key, setKey] = useState("");
+  const navigat = useNavigate();
+  const [orderId, setOrderId] = useState("");
+  const { user } = useAuth();
+  const [userData , setUserData] = useState();
+  
+  console.log("User:", user);
+  useEffect(() => {
+    // console.log("Setting userId:", user.userData._id);
+    setUserData(user.userData);
+  }, [user]);
+  console.log(userData);
+
+
+
 
   const sampleBookingDetails = {
     depositPrice: 4000,
@@ -31,6 +49,7 @@ const Payment = () => {
   console.log(checkout);
 
   const productId = checkout.carId;
+  console.log(productId);
   useEffect(() => {
     fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${productId}`)
       .then(response => response.json())
@@ -45,7 +64,7 @@ const Payment = () => {
   const totalRent = products.price * checkout.numberOfDays;
   const taxAmount = totalRent * 5 / 100;
 
-  // Calculate total amount
+
   const calculateTotal = () => {
     const totalBeforeDiscount = products.depositPrice + totalRent + taxAmount;
     const discountedAmount = totalBeforeDiscount * discount;
@@ -53,42 +72,153 @@ const Payment = () => {
   };
 
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Deposite");
 
-  // Handle payment method change
+
   const handlePaymentMethodChange = (method) => {
     setPaymentMethod(method);
+    setSelectedAmount(method === "Deposit" ? products.depositPrice : calculateTotal());
   };
 
-  // Handle payment processing
-  const handlePayment = () => {
+
+
+
+  const handlePayment = async (re, res) => {
+
+
+    await fetch('http://localhost:5000/api/checkout/getkey')
+      .then(response => response.json())
+      .then(data => {
+        setKey(data.key);
+        console.log(data);
+      })
+      .catch(error => console.error('Error fetching products in payment page :', error));
+    console.log(window);
+
+
+    const response = await fetch("http://localhost:5000/api/checkout/payment", {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({ amount: Math.round(selectedAmount) }),
+    });
+
+    // const data = await response.json();
+    const order = await response.json();
+    console.log(order);
+    if (response.ok) {
+      console.log(order.order.id);
+      setOrderId(order.order.id);
+
+    } else {
+      const errorData = await response.json();
+      throw new Error(`Payment request failed: ${errorData.message}`);
+    }
+
+
+    const sendPaymentData = async (values) => {
+      console.log(values);
+      try {
+        const response = await fetch('http://localhost:5000/api/checkout/verifyPayment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+        if (response.ok) {
+          navigat('/paymentsuccess');
+        }else{
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        alert('Success');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+
+
+
+    console.log(key);
+    const options = {
+      key: key, // Enter the Key ID generated from the Dashboard
+      amount: selectedAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "RentEasy",
+      description: "Test Transaction",
+      image: {logo},
+      order_id: orderId,
+      handler: function (response) {
+        console.log(response);
+        var values = {
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_signature: response.razorpay_signature,
+          userId: userData._id,
+          carId: productId,
+          paymentMethod : paymentMethod ,
+          amount : selectedAmount
+        };
+        sendPaymentData(values);
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+      },
+      prefill: {
+        name: "RentEasy",
+        email: "renteasy312@gmail.com",
+        contact: "70963054878"
+      },
+      notes: {
+        address: "Razorpay Corporate Office"
+      },
+      theme: {
+        color: "#363C44"
+      },
+      callback_url: "http://localhost:5000/api/checkout/verifyPayment" //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    };
+
+
+
+    const razor = new window.Razorpay(options);
+    console.log(razor);
+    razor.open();
+    razor.on('payment.failed', function (response) {
+      console.log(response);
+      alert("This step of Payment Failed");
+    });
+
+
     if (paymentMethod === "Deposit" || paymentMethod === "Total") {
-      console.log(`Payment processed for ${paymentMethod} amount`);
-      // Here you can add logic for actual payment processing
+      console.log(`Payment processed for ${paymentMethod} amount :  ${selectedAmount}`);
+
     } else if (paymentMethod === "CashOnDelivery") {
       console.log("Payment on delivery");
-      // Here you can add logic for cash on delivery
+
     } else {
       console.error("Please select a payment method.");
     }
   };
 
-  // Render pay button based on selected payment method
+
   const renderPayButton = () => {
     if (paymentMethod === "Deposit" || paymentMethod === "Total") {
       return (
-        <div className="flex justify-center"> {/* Centering container */}
+        <div className="flex justify-center">
           <button
             className="bg-black text-white py-2 px-5 rounded-md mt-10 hover:bg-gray-700 focus:outline-none"
             onClick={handlePayment}
           >
-            Pay ₹{paymentMethod === "Deposit" ? products.depositPrice : calculateTotal()}
+            Pay ₹{selectedAmount}
           </button>
         </div>
       );
     } else if (paymentMethod === "CashOnDelivery") {
       return (
-        <div className="flex justify-center"> {/* Centering container */}
+        <div className="flex justify-center">
           <button
             className="bg-black text-white py-2 px-5 rounded-md mt-10 hover:bg-gray-700 focus:outline-none"
             onClick={handlePayment}
@@ -139,49 +269,26 @@ const Payment = () => {
               <p className="font-semibold">₹{calculateTotal()}</p>
             </div>
           </div>
-
-
-          {/* <div className="flex items-center mb-4">
-            <input
-              type="text"
-              placeholder="Enter Coupon Code"
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none flex-1 mr-2"
-              onChange={(e) => setCouponCode(e.target.value)}
-            />
-            <button
-              className="bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
-              onClick={applyCoupon}
-            >
-              Apply
-            </button>
-          </div> */}
-
-
-          <div class="container bg-white text-black p-8 rounded-lg shadow-lg max-w-md mx-auto">
-            <div class="text-3xl font-bold mb-4">Special Offer!</div>
-            <div class="text-lg mb-4">Get <span class="text-yellow-400 font-bold">25% OFF</span> your  purchase!</div>
-            <div class="text-base mb-4">Enter coupon code:</div>
-            <div class=" text-white rounded-lg  flex items-center justify-between">
+          <div className="bg-white w-full text-black p-6 rounded-lg shadow-lg ">
+            <div className="text-3xl pt-4  font-bold mb-4">Special Offer!</div>
+            <div className="text-lg mb-4">Unlock exclusive savings by entering your personalized coupon code at checkout!</div>
+            <div className="text-base mb-4">Enter coupon code:</div>
+            <div className="text-white rounded-lg flex items-center justify-normal gap-10">
               <input
-              type="text" 
-              class="text-2xl border-black border-2 rounded-lg pl-1 font-semibold text-black"
-              onChange={(e) => setCouponCode(e.target.value)} />
-              <button 
-              class="bg-blue-800 text-white px-3 py-1  rounded hover:bg-blue-600 focus:outline-none 
-              focus:ring-2 focus:ring-blue-500"
-              onClick={applyCoupon}>
+                type="text"
+                className="text-2xl border-black border-2 rounded-lg pl-1 font-semibold text-black"
+                onChange={(e) => setCouponCode(e.target.value)} />
+              <button
+                className="bg-black text-white px-3 py-1  rounded focus:outline-none 
+              focus:ring-2 focus:ring-white-500"
+                onClick={applyCoupon}>
                 Apply
-                </button>
+              </button>
             </div>
-            <div class="text-sm mt-4">
-              <p>Valid until <span class="font-semibold">December 31, 2023</span></p>
+            <div className="text-sm  mt-6 pb-6">
               <p>Terms and conditions apply.</p>
             </div>
           </div>
-
-
-
-
           {/* Payment Method Selection */}
           <div className="bg-white p-4 mt-6 rounded-md shadow-md">
             <p className="text-xl font-semibold mb-4">Select Payment Method:</p>
@@ -189,7 +296,7 @@ const Payment = () => {
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="deposit"
+                  id="Deposit"
                   name="paymentMethod"
                   value="Deposit"
                   checked={paymentMethod === "Deposit"}
@@ -200,24 +307,13 @@ const Payment = () => {
               <div className="flex items-center">
                 <input
                   type="radio"
-                  id="total"
+                  id="Total"
                   name="paymentMethod"
                   value="Total"
                   checked={paymentMethod === "Total"}
                   onChange={() => handlePaymentMethodChange("Total")}
                 />
                 <label htmlFor="total" className="ml-2">Total Amount</label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="cashOnDelivery"
-                  name="paymentMethod"
-                  value="CashOnDelivery"
-                  checked={paymentMethod === "CashOnDelivery"}
-                  onChange={() => handlePaymentMethodChange("CashOnDelivery")}
-                />
-                <label htmlFor="cashOnDelivery" className="ml-2">Pay on Delivery</label>
               </div>
             </div>
             {renderPayButton()}

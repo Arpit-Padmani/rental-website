@@ -14,6 +14,9 @@ import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import PaymentSuccessfull from './components/PaymentSuccessfull';
+import Orders from './pages/Orders';
+import './App.css';
 
 function App() {
   return (
@@ -29,10 +32,12 @@ function App() {
           <Route path="/contactus" element={<Contactus />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword/:id/:token" element={<ResetPassword />} />
+          <Route path="/myorders" element={<Orders />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Register />} />
           <Route path='/extra' element={<Extra />} />
           <Route path='/logout' element={<Logout />}/>
+          <Route path='/paymentsuccess' element={<PaymentSuccessfull />}/>
           <Route path='/admin/*' element={<AdminApp />} />
 
         </Routes>

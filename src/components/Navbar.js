@@ -29,8 +29,8 @@ export const Navbar = () => {
                     {isloggedIn ?
                         (
                             <>
-                                <Link to="/logout">
-                                    <button className='border py-1 px-4 rounded-md ' onClick={()=>{toast.success("Logot Successfully")}}>Logout</button>
+                                <Link to="/myorders">
+                                    <button className='border py-1 px-4 rounded-md '>My Orders</button>
                                 </Link>
 
                                 <Link to="/profile">

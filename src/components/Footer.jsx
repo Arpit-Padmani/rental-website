@@ -16,8 +16,8 @@ export default function Footer() {
           </div>
 
           <p className="mt-4 max-w-xs text-gray-500">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non cupiditate quae nam
-            molestias.
+          With RentEasy, users can easily search, compare, and book rentals online, making the
+           process of finding the perfect rental property or vehicle hassle-free
           </p>
 
           <ul className="mt-8 flex gap-6">

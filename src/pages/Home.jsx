@@ -6,21 +6,25 @@ import bike from '../assest/bike.jpg';
 import { Navbar } from '../components/Navbar';
 import logo from '../assest/logo.png'
 import Footer from '../components/Footer';
+import HeroSection from '../components/HeroSection';
 
 
 export const Home = () => {
   return (
     <div className='w-full '>
       <Navbar />
-
-      <img src={banner} className='relative h-screen w-screen' alt="im" />
+      <HeroSection/>
+      <div>
+      {/* <img src={banner} className='relative h-screen w-screen' alt="im" />
       <div className='max-w-[1260px] mx-auto'>
         <p className='absolute top-[180px] text-5xl text-white'>Unlock Endless Driving <br /> with RentEasy</p>
         <p className='absolute top-[325px] text-xl text-white opacity-60'>Explore the open road with our premium car rental services. <br />
           Choose from a fleet of modern vehicles to elevate your travel experience</p>
         <button className='absolute top-[410px] text-2xl border rounded-lg p-1 px-2 bg-white'>Rent Car</button>
-      </div>
+      </div> */}
 
+        
+      </div>
       {/* rent a car section */}
 
       <div className='w-11/12 flex flex-row items-center max-w-[1260px] mx-auto mt-24'>
@@ -38,10 +42,10 @@ export const Home = () => {
             options, and competitive rates. Choose us for your next adventure and let us elevate your travel experience with quality
             vehicles and exceptional service.</p>
 
-          <button className='max-w-36 mt-7 text-xl rounded-lg hover:shadow-md hover:shadow-black transition duration-300 p-1 px-2 text-white bg-black'>Rent Car</button>
+          {/* <button className='max-w-36 mt-7 text-xl rounded-lg hover:shadow-md hover:shadow-black transition duration-300 p-1 px-2 text-white bg-black'>Rent Car</button> */}
 
         </div>
-        <img src={carimg} className='max-w-[500px] h-[600px]  rounded-lg' alt="" />
+        <img src={carimg} className=' relative max-w-[500px] h-[600px]  rounded-lg' alt="" />
 
       </div>
 
@@ -64,8 +68,8 @@ export const Home = () => {
             well-maintained bikes is ready for your adventure. Enjoy the freedom of two wheels and soak in the sights effortlessly.
             Rent a bike today and pedal your way to a memorable experience.</p>
 
-          <button className='max-w-36 mt-7 text-xl rounded-lg hover:shadow-md hover:shadow-black 
-          transition duration-300 p-1 px-2 text-white bg-black'>Rent Bike</button>
+          {/* <button className='max-w-36 mt-7 text-xl rounded-lg hover:shadow-md hover:shadow-black 
+          transition duration-300 p-1 px-2 text-white bg-black'>Rent Bike</button> */}
 
         </div>
 

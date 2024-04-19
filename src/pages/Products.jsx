@@ -96,7 +96,7 @@ export const Products = () => {
                 <h3 key={product.id} className="text-xl font-semibold mb-2">{product.vehicleName} - {product.vehicleModel}</h3>
                 <div key={product.id} className="text-gray-600  flex"><p className="text-black font-semibold mr-1">Price:  </p> {product.price}/ day</div>
                 <div key={product.id} className="text-gray-600 mb-6 flex"><p className="text-black font-semibold mr-1">City:  </p> {product.city}</div>
-                <Link ey={product.id} to={`/productdetail/${product._id}`} className="block w-full bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none text-center">
+                <Link key={product.id} to={`/productdetail/${product._id}`} className="block w-full bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none text-center">
                   View Details
                 </Link>
               </div>

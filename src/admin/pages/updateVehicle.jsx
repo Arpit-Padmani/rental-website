@@ -13,10 +13,13 @@ const UpdateVehicle = () => {
     hasGPS: "",
     seatingCapacity: "",
     modelYear: "",
+    photo1: null,
+    photo2: null,
+    photo3: null,
     location: "",
     price: "",
     depositPrice: "",
-    city: "",
+    city: ""
   });
 
   const [products, setProducts] = useState(null);
@@ -49,6 +52,18 @@ const UpdateVehicle = () => {
       .catch(error => console.error('Error fetching product:', error));
 
   }, [id]);
+
+  const handleImageChange = (e, photoNumber) => {
+    const file = e.target.files[0];
+    setUpdatedProduct((prevData) => ({
+      ...prevData,
+      [`photo${photoNumber}`]: file,
+    }));
+    console.log(file);
+  };
+
+  console.log(updatedpProduct);
+
   console.log(updatedpProduct);
   // const vehicle = id === products._id ? sampleVehicle : null;
   const navigate = useNavigate();
@@ -68,16 +83,20 @@ const UpdateVehicle = () => {
   const handleUpdate = async (e, req, res) => {
 
     e.preventDefault();
+
+    const formdataToSend = new FormData();
+    formdataToSend.append("carDetails", JSON.stringify(updatedpProduct));
+    formdataToSend.append("photo1", updatedpProduct.photo1);
+    formdataToSend.append("photo2", updatedpProduct.photo2);
+    formdataToSend.append("photo3", updatedpProduct.photo3);
+    console.log(formdataToSend);
+
+
     try {
-      // console.log(user.userData._id);
-      // console.log('Request Payload:', JSON.stringify(userData));
-      console.log(id);
-      const response = await fetch(`http://localhost:5000/api/detail/product/update/${id}`, {
+      console.log(updatedpProduct);
+      const response = await fetch(`http://localhost:5000/api/update-vehical/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedpProduct),
+      body: formdataToSend,
       });
       console.log(response);
       const res_data = await response.json();
@@ -85,13 +104,10 @@ const UpdateVehicle = () => {
 
       if (response.ok) {
         toast.success("Updated Successfully", { position: "top-right" });
-        // console.log("updated successfully done");
-        // Handle success
       } else {
         toast.error("Error in updating data", { position: "top-right" })
-        // Handle error
-        // const errorData = await response.json();
-        console.error('Error:');
+        const errorData = await response.json();
+        console.error(errorData);
       }
 
     } catch (error) {
@@ -147,6 +163,33 @@ const UpdateVehicle = () => {
                   value={updatedpProduct.modelYear}
                   onChange={handleChange}
                   className="p-2 border ml-2 rounded-md"
+                />
+              </label>
+              <label className="block mb-4">Photo 1 :-
+                <input
+                  type="file"
+                  id="photo1"
+                  name="photo1"
+                  onChange={(e) => handleImageChange(e, 1)}
+                  className="mt-4"
+                />
+              </label>
+              <label className="block mb-4">Photo 2 :-
+                <input
+                  type="file"
+                  id="photo2"
+                  name="photo2"
+                  onChange={(e) => handleImageChange(e, 2)}
+                  className="mt-4"
+                />
+              </label>
+              <label className="block mb-4">Photo 3 :-
+                <input
+                  type="file"
+                  id="photo3"
+                  name="photo3"
+                  onChange={(e) => handleImageChange(e, 3)}
+                  className="mt-4"
                 />
               </label>
               <label className="block mb-4">
@@ -250,7 +293,6 @@ const UpdateVehicle = () => {
                   className="p-2 border ml-2 rounded-md"
                 />
               </label>
-              {/* Add more input fields as needed */}
               <button
                 type="button"
                 onClick={handleUpdate}

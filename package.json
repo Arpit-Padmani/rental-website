@@ -18,6 +18,8 @@
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.4",
     "redux": "^5.0.1",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.75.0",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },

@@ -187,7 +187,7 @@ const Checkout = () => {
                 type="date"
                 name="startDate"
                 value={bookingDetails.startDate}
-                min={today} // Set minimum date to today
+                min={today} 
                 onChange={handleStartDateChange}
                 onBlur={calculateNumberOfDays}
                 className="w-80 p-1 border rounded-md"
@@ -201,7 +201,7 @@ const Checkout = () => {
                 type="date"
                 name="endDate"
                 value={bookingDetails.endDate}
-                min={bookingDetails.startDate || today} // Set minimum date to startdate or today
+                min={bookingDetails.startDate || today} 
                 onChange={handleBookingChange}
                 onBlur={calculateNumberOfDays}
                 className="w-80 p-1 border rounded-md"

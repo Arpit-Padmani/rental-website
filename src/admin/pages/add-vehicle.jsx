@@ -86,8 +86,8 @@ const AddVehicleForm = () => {
     try {
       const response = await fetch('http://localhost:5000/api/add-vehicle', {
         method: 'POST',
-        body: formdataToSend,
-      });
+          body: formdataToSend,
+        });
       console.log(response);
       const res_data = await response.json();
       console.log(res_data);
