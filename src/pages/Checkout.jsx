@@ -58,6 +58,19 @@ const Checkout = () => {
 
   const handleCheckout = async (req, res) => {
 
+    if (
+      !bookingDetails.name ||
+      !bookingDetails.email ||
+      !bookingDetails.phone ||
+      !bookingDetails.address ||
+      !bookingDetails.startDate ||
+      !bookingDetails.endDate ||
+      bookingDetails.numberOfDays <= 0
+    ) {
+      toast.error("Please fill in all required details.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:5000/api/checkout/bookingDetail", {
         method: "POST",

@@ -103,15 +103,15 @@ const UpdateVehicle = () => {
       console.log(res_data);
 
       if (response.ok) {
-        toast.success("Updated Successfully", { position: "top-right" });
+        toast.success("Updated Successfully");
       } else {
-        toast.error("Error in updating data", { position: "top-right" })
+        toast.error("Error in updating data")
         const errorData = await response.json();
         console.error(errorData);
       }
 
     } catch (error) {
-      toast.error("Error in updating data", { position: "top-right" })
+      toast.error("Error in updating data")
       console.error(error);
     }
 

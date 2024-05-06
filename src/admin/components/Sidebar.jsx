@@ -64,7 +64,7 @@ const Sidebar = () => {
       </div>
       <div className="flex-grow"></div>
       <div>
-        <p className="p-2 flex items-center hover:cursor-pointer">
+        <p className="p-2 flex mx-auto hover:cursor-pointer">
           @copyrights RentEasy.com
         </p>
       </div>

@@ -106,7 +106,7 @@ export const ProductDetails = () => {
                                 <strong>Vehicle Model Year : </strong> {products?.modelYear}
                             </p>
                             <p className="mb-4">
-                                <strong>Price : </strong> {products?.price}
+                                <strong>Price : </strong> {products?.price} / day
                             </p>
                             <p className="mb-4">
                                 <strong>Deposit Price : </strong> {products?.depositPrice}

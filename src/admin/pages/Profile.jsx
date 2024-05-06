@@ -85,19 +85,19 @@ const Profile = () => {
             console.log(res_data);
 
             if (response.ok) {
-                toast.success("Updated Successfully", { position: "top-right" });
+                toast.success("Updated Successfully");
                 // console.log("updated successfully done");
                 setIsUpdateMode(false);
                 // Handle success
             } else {
-                toast.error("Error in updating data", { position: "top-right" })
+                toast.error("Error in updating data")
                 // Handle error
                 // const errorData = await response.json();
                 console.error('Error:');
             }
 
         } catch (error) {
-            toast.error("Error in updating data", { position: "top-right" })
+            toast.error("Error in updating data")
             console.error(error);
         }
     };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Spinner from "../components/Spinner";
+import toast from "react-hot-toast";
 
 const ViewVehicle = () => {
 
@@ -45,12 +46,13 @@ const ViewVehicle = () => {
       const res_data = await response.json();
       console.log(res_data);
       if (response.ok) {
-        alert("Vehical deleted successfullt");
+        toast.success("Vehical deleted successfullt");
         navigate('/admin/your-vehicle')
 
       }
 
     } catch (error) {
+      toast.error("Fail to delete vehicle");
       console.log("Error in deleting data... " + error);
     }
   }

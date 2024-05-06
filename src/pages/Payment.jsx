@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../redux/auth";
 import logo from "../assest/logo.png"
+import toast from "react-hot-toast";
 
 const Payment = () => {
   // Sample booking details
@@ -129,6 +130,7 @@ const Payment = () => {
         });
         if (response.ok) {
           navigat('/paymentsuccess');
+          toast.success("Booking Confirmed! Enjoy Your Ride!")
         }else{
           throw new Error('Network response was not ok');
         }
@@ -136,6 +138,7 @@ const Payment = () => {
         alert('Success');
       } catch (error) {
         console.error('Error:', error);
+        // toast.error("Please login first ");
       }
     };
 

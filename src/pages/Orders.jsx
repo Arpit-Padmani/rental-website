@@ -61,6 +61,8 @@ export default function Orders() {
 
             } catch (error) {
                 console.log("Error in orders page:", error);
+                setLoading(false);
+
             }
         };
         if (userData) {

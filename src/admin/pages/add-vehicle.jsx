@@ -93,7 +93,7 @@ const AddVehicleForm = () => {
       console.log(res_data);
 
       if (response.ok) {
-        toast.success("Vehicle details added successfully ", { position: "top-right" });
+        toast.success("Vehicle details added successfully ");
         setFormData({
           vehicleName: '',
           vehicleModel: '',
@@ -110,10 +110,10 @@ const AddVehicleForm = () => {
           category: 'car',
         });
       } else {
-        toast.error("Failed to add vehicle detail ", { position: "top-right" });
+        toast.error("Failed to add vehicle detail ");
       }
     } catch (error) {
-      toast.error("Failed to add vehicle detail ", { position: "top-right" });
+      toast.error("Failed to add vehicle detail ");
       console.error('Error:', error);
     }
   };

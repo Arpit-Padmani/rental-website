@@ -43,7 +43,7 @@ export default function Contactus() {
         console.log("data submited");
         // alert('thank you ');
         toast.success("Thank you ❤️ "+ contactData.firstName.charAt(0).toUpperCase() + contactData.firstName.slice(1) + " " +
-        contactData.lastName.charAt(0).toUpperCase() + contactData.lastName.slice(1) + " ",{position: "right-top"});
+        contactData.lastName.charAt(0).toUpperCase() + contactData.lastName.slice(1) + " ");
 
       } else {
         
@@ -85,7 +85,7 @@ export default function Contactus() {
 
                 <h2 className="mt-4 text-base font-medium text-[#2D5A6A] dark:text-white">Email</h2>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Our friendly team is here to help.</p>
-                <a href='mailto:arpitpadmani197@gmail.com' className="mt-2 text-sm text-richblack-5 dark:text-blue-400">email@address.com</a>
+                <a href='mailto:renteasy312@gmail.com' className="mt-2 text-sm text-richblack-5 dark:text-blue-400">renteasy312@gmail.com</a>
               </div>
 
               <div className='flex flex-col justify-center items-center'>
@@ -126,7 +126,7 @@ export default function Contactus() {
                       name='firstName'
                       value={contactData.firstName}
                       onChange={changeHandler}
-                      placeholder="John "
+                      placeholder="First Name "
                       className="block px-5 py-2.5 mt-2  placeholder-gray-400 
                                            border border-gray-200  dark:placeholder-gray-600 
                                           dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 
@@ -141,7 +141,7 @@ export default function Contactus() {
                       name='lastName'
                       value={contactData.lastName}
                       onChange={changeHandler}
-                      placeholder="Doe"
+                      placeholder="Last Name"
                       className="block px-5 py-2.5 mt-2  placeholder-gray-400 
                                            border border-gray-200  dark:placeholder-gray-600 
                                           dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 
@@ -157,7 +157,7 @@ export default function Contactus() {
                     name='email'
                     value={contactData.email}
                     onChange={changeHandler}
-                    placeholder="johndoe@example.com"
+                    placeholder="Email"
                     className="block px-5 py-2.5 mt-2  placeholder-gray-400 
                                            border border-gray-200  dark:placeholder-gray-600 
                                           dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 
@@ -178,7 +178,7 @@ export default function Contactus() {
                                           focus:ring focus:ring-opacity-40 bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full p-[12px]" rows={10} placeholder="Message"></textarea>
                 </div>
 
-                <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-black rounded-lg focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                   Send message
                 </button>
               </form>

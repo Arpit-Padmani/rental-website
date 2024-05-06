@@ -67,8 +67,8 @@ export const Products = () => {
             >
               <option value="all">All Cities</option>
               <option value="Surat">Surat</option>
-              <option value="Rajkot">Rajkot</option>
-              <option value="Ahemadabad">Ahmedabad</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Ahmedabad">Ahmedabad</option>
             </select>
           </div>
 
@@ -84,24 +84,30 @@ export const Products = () => {
         <hr className="my-6 mt-10 mb-12" />
         {loading ? (
           <div><Spinner /></div>
-        ) : (
+        ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
               <div key={product.id} className="bg-white p-4 rounded-md shadow-md">
-                <img key={product.id}
+                <img
                   src={`http://localhost:5000/uploads/${product.photo1}`}
                   alt={product.name}
                   className="w-full h-52 object-cover mb-4 rounded-md"
                 />
-                <h3 key={product.id} className="text-xl font-semibold mb-2">{product.vehicleName} - {product.vehicleModel}</h3>
-                <div key={product.id} className="text-gray-600  flex"><p className="text-black font-semibold mr-1">Price:  </p> {product.price}/ day</div>
-                <div key={product.id} className="text-gray-600 mb-6 flex"><p className="text-black font-semibold mr-1">City:  </p> {product.city}</div>
-                <Link key={product.id} to={`/productdetail/${product._id}`} className="block w-full bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none text-center">
+                <h3 className="text-xl font-semibold mb-2">{product.vehicleName} - {product.vehicleModel}</h3>
+                <div className="text-gray-600  flex">
+                  <p className="text-black font-semibold mr-1">Price:  </p> {product.price}/ day
+                </div>
+                <div className="text-gray-600 mb-6 flex">
+                  <p className="text-black font-semibold mr-1">City:  </p> {product.city}
+                </div>
+                <Link to={`/productdetail/${product._id}`} className="block w-full bg-black text-white py-2 px-5 rounded-md hover:bg-gray-700 focus:outline-none text-center">
                   View Details
                 </Link>
               </div>
             ))}
           </div>
+        ) : (
+          <p className="text-center text-2xl mt-8 text-black">No products found.</p>
         )}
       </div>
       <Footer />
