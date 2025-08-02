@@ -68,7 +68,7 @@ const Extra = () => {
     e.preventDefault();
     try {
 
-      const response = await fetch(`http://localhost:5000/api/auth/register`, {
+      const response = await fetch(`http://localhost:3000/api/auth/register`, {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -86,7 +86,7 @@ const Extra = () => {
         if (res_data.userType == "renter") {
           window.location.href = "http://localhost:3000/"; 
           } else if(res_data.userType == "owner") {
-            window.location.href = "http://localhost:3000/admin/profile";
+            window.location.href = "http://localhost:3001/admin/profile";
           }
       }
       else {

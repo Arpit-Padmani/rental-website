@@ -28,7 +28,9 @@ export default function ResetPassword() {
             return; // Exit early if passwords don't match
         }
         try {
-            const response = await fetch(`http://localhost:5000/api/forgot/resetPassword/${id}/${token}`, {
+            console.log(id);
+            console.log(token);
+            const response = await fetch(`http://localhost:3000/api/forgot/resetPassword/${id}/${token}`, {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json"

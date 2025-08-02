@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+
+import moment from 'moment';
 import Sidebar from "../components/Sidebar";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../redux/auth";
@@ -9,6 +11,7 @@ const YourVehical = () => {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [renterIds, setRenterIds] = useState([]);
   const [carIds, setCarIds] = useState([]);
+  const [checkoutDetsils, setCheckoutDetsils] = useState([]);
   const [bookedvehicle, setBookedvehicle] = useState([]);
   const [userdetails, setUserdetails] = useState([]);
 
@@ -20,7 +23,7 @@ const YourVehical = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://localhost:5000/api/detail/getCarDetails')
+    fetch('http://localhost:3000/api/detail/getCarDetails')
       .then(response => response.json())
       .then(data => {
         setLoading(false);
@@ -48,7 +51,7 @@ const YourVehical = () => {
 
   const FetchPaymentDetial = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/orders/findByCarId", {
+      const response = await fetch("http://localhost:3000/api/orders/findByCarId", {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -81,6 +84,7 @@ const YourVehical = () => {
   // fetch car details :- 
   useEffect(() => {
     if (carIds.length > 0) {
+      fetchCheckoutDetails(carIds);
       fetchCarDetails(carIds);
     }
     if (renterIds.length > 0) {
@@ -88,10 +92,10 @@ const YourVehical = () => {
     }
   }, [carIds, renterIds]);
 
-
+  console.log(carIds);
   const fetchCarDetails = async (carIds) => {
     try {
-      const response = await fetch("http://localhost:5000/api/orders/findCarDetailsBYCarId", {
+      const response = await fetch("http://localhost:3000/api/orders/findCarDetailsBYCarId", {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -111,12 +115,37 @@ const YourVehical = () => {
       console.log("Error in fetchCarDetails:", error);
     }
   }
-  console.log(bookedvehicle);
+
+  const fetchCheckoutDetails = async (carIds) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/checkout/getmulticheckoutDetial", {
+        method: "POST",
+        headers: {
+          'Content-Type': "application/json"
+        },
+        body: JSON.stringify({ carIds }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Request failed: ${errorData.message}`);
+      }
+
+      const products = await response.json();
+      console.log(products);
+      setCheckoutDetsils(products.products);
+      console.log(checkoutDetsils);
+    } catch (error) {
+      console.log("Error in fetchCarDetails:", error);
+    }
+  }
+
+  console.log(checkoutDetsils);
 
   const fetchUserDetails = async (renterIds) => {
     console.log(renterIds);
     try {
-      const response = await fetch("http://localhost:5000/api/orders/findUserDetails", {
+      const response = await fetch("http://localhost:3000/api/orders/findUserDetails", {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -139,6 +168,8 @@ const YourVehical = () => {
 
   const availableProducts = products.filter(product => !carIds.includes(product._id));
   console.log(availableProducts);
+  // const startDate = "2024-07-08"
+  // console.log(moment(startDate).format('DD-MM-YYYY'));
   return (
     <div className="flex">
       <Sidebar />
@@ -151,7 +182,7 @@ const YourVehical = () => {
         ) : (
           <div>
             {availableProducts.length === 0 && (
-              <p className="text-center text-2xl text-red-500 font-semibold">No available vehicles.</p>
+              <p className="text-center text-[26px] text-red-500 font-semibold">No available vehicles.</p>
             )}
             {availableProducts.length > 0 && (
               <div>
@@ -163,12 +194,12 @@ const YourVehical = () => {
                       <div >
                         <div>
                           <img className="w-80 h-48 mt-5 object-cover rounded-md items-center"
-                            src={`http://localhost:5000/uploads/${product.photo1}`}
+                            src={`http://localhost:3000/uploads/${product.photo1}`}
                             alt={product.vehicleName} />
                         </div>
                         <div className="p-4 ">
                           <h2 className="text-xl font-semibold mb-2">
-                            Name: {product.vehicleName}
+                            Name : {product.vehicleName}
                           </h2>
                           <h2 className="text-xl font-semibold mb-2">
                             Model: {product.vehicleModel}
@@ -205,18 +236,18 @@ const YourVehical = () => {
                       <div >
                         <div>
                           <img className="w-80 h-48 mt-5 object-cover rounded-md items-center"
-                            src={`http://localhost:5000/uploads/${product.photo1}`}
+                            src={`http://localhost:3000/uploads/${product.photo1}`}
                             alt={product.vehicleName} />
                         </div>
                         <div className="p-4 ">
                           <h2 className="text-xl font-semibold mb-2">
-                            Name:<span className='text-lg'> {product.vehicleName}</span>
+                            Name: <span className='text-lg'> {product.vehicleName}</span>
                           </h2>
                           <h2 className="text-xl font-semibold mb-2">
-                            Model:<span className='text-lg'>{product.vehicleModel}</span> 
+                            Model: <span className='text-lg'>{product.vehicleModel}</span>
                           </h2>
                           <h2 className="text-xl font-semibold mb-2">
-                            Transmission Type: <span className='text-lg'>{product.transmissionType}</span> 
+                            Transmission Type: <span className='text-lg'>{product.transmissionType}</span>
                           </h2>
                           {paymentDetails.map(payment => (
                             payment.carId === product._id && (
@@ -225,24 +256,40 @@ const YourVehical = () => {
                                   <p className="text-black text-xl font-semibold mr-1">Payment Method: </p>
                                   <span className='text-lg'>{payment.paymentMethod}</span>
                                 </div>
-                                <div className="text-gray-600 mb-3 flex items-baseline">
+                                <div className="text-gray-600 mb-1 flex items-baseline">
                                   <p className="text-black text-xl font-semibold mr-1">Amount Paid: </p>
                                   <span className='text-lg'>{payment.amount}</span>
                                 </div>
                               </div>
                             )
                           ))}
-
+                          {checkoutDetsils.map((checkout) => (
+                            checkout.carId === product._id && (
+                            <div key={user._id} className="flex flex-col items-center">
+                              <div className=" rounded-md w-full"><div className="text-gray-600 mb-1 flex items-baseline">
+                                <p className="text-black text-xl font-semibold mr-1">Starting Date :- </p>
+                                <span className='text-lg'> {moment(checkout.startDate).format('DD-MM-YYYY')}</span>
+                              </div>
+                                <div className="text-gray-600 mb-1 flex items-baseline">
+                                  <p className="text-black text-xl font-semibold mr-1">Ending Date :- </p>
+                                  <span className='text-lg'>{moment(checkout.endDate).format('DD-MM-YYYY')}</span>
+                                </div>
+                                
+                                <p className="text-gray-600"></p>
+                              </div>
+                            </div>
+                          )
+                          ))}
                           {userdetails.map((user) => (
-                            <div key={user._id} className="flex flex-col items-center mb-6">
+                            <div key={user._id} className="flex flex-col items-center ">
                               <div className="text-center mb-2">
                                 <h3 className="text-lg font-semibold">User Details</h3>
                               </div>
-                              <div className=" p-4 rounded-md w-full"><div className="text-gray-600 mb-1 flex items-baseline">
-                                  <p className="text-black text-xl font-semibold mr-1">Name :- </p>
-                                  <span className='text-lg'>{user.name}</span>
-                                </div>
-                                <div className="text-gray-600 mb-3 flex items-baseline">
+                              <div className=" rounded-md w-full"><div className="text-gray-600 mb-1 flex items-baseline">
+                                <p className="text-black text-xl font-semibold mr-1">Name :- </p>
+                                <span className='text-lg'>{user.name}</span>
+                              </div>
+                                <div className="text-gray-600 mb-1 flex items-baseline">
                                   <p className="text-black text-xl font-semibold mr-1">Email :- </p>
                                   <span className='text-lg'>{user.email}</span>
                                 </div>
@@ -254,6 +301,8 @@ const YourVehical = () => {
                               </div>
                             </div>
                           ))}
+
+                          
                           <div className="flex justify-center ">
                             {/* <Link to={`/admin/vehicleDetail/${product._id}`} className="bg-black text-white py-2 px-5  rounded-md hover:bg-gray-700 focus:outline-none">
                       View Vehicle

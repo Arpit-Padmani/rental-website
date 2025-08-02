@@ -37,13 +37,13 @@ const Payment = () => {
   };
 
   const { id } = useParams();
-  // console.log(id);
+  console.log(id);
   useEffect(() => {
-    fetch(`http://localhost:5000/api/checkout/getcheckoutDetial/${id}`)
+    fetch(`http://localhost:3000/api/checkout/getcheckoutDetial/${id}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
-        setCheckout(data);
+        console.log(data.products[0])
+        setCheckout(data.products[0]);
       })
       .catch(error => console.error('Error fetching products:', error));
   }, []);
@@ -52,7 +52,7 @@ const Payment = () => {
   const productId = checkout.carId;
   console.log(productId);
   useEffect(() => {
-    fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${productId}`)
+    fetch(`http://localhost:3000/api/detail/getProduct/ProductById/${productId}`)
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -87,7 +87,7 @@ const Payment = () => {
   const handlePayment = async (re, res) => {
 
 
-    await fetch('http://localhost:5000/api/checkout/getkey')
+    await fetch('http://localhost:3000/api/checkout/getkey')
       .then(response => response.json())
       .then(data => {
         setKey(data.key);
@@ -97,7 +97,7 @@ const Payment = () => {
     console.log(window);
 
 
-    const response = await fetch("http://localhost:5000/api/checkout/payment", {
+    const response = await fetch("http://localhost:3000/api/checkout/payment", {
       method: "POST",
       headers: {
         'Content-Type': "application/json"
@@ -121,7 +121,7 @@ const Payment = () => {
     const sendPaymentData = async (values) => {
       console.log(values);
       try {
-        const response = await fetch('http://localhost:5000/api/checkout/verifyPayment', {
+        const response = await fetch('http://localhost:3000/api/checkout/verifyPayment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ const Payment = () => {
       theme: {
         color: "#363C44"
       },
-      callback_url: "http://localhost:5000/api/checkout/verifyPayment" //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      callback_url: "http://localhost:3000/api/checkout/verifyPayment" //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     };
 
 

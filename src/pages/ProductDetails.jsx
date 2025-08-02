@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useAuth } from "../redux/auth";
 import Spinner from "../components/Spinner";
+import toast from "react-hot-toast";
 
 export const ProductDetails = () => {
     const [products, setProducts] = useState(null);
@@ -12,16 +13,18 @@ export const ProductDetails = () => {
     const [ownerDetails, setOwnerDetails] = useState({});
     const [loading, setLoading] = useState(true);
 
+    
+    const navigate = useNavigate();
     const { id } = useParams();
     console.log(id);
 
 
 
-    const { user } = useAuth();
+    const { user , isloggedIn } = useAuth();
 
     useEffect(() => {
         setLoading(true);
-        fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${id}`)
+        fetch(`http://localhost:3000/api/detail/getProduct/ProductById/${id}`)
             .then(response => response.json())
             .then(productData => {
                 console.log(productData);
@@ -30,7 +33,7 @@ export const ProductDetails = () => {
                 setPhotos([productData.photo1, productData.photo2, productData.photo3].filter(Boolean));
 
 
-                fetch(`http://localhost:5000/api/detail/getOwner/OwnerById/${ownerId}`)
+                fetch(`http://localhost:3000/api/detail/getOwner/OwnerById/${ownerId}`)
                     .then(response => response.json())
                     .then(ownerData => {
                         console.log(ownerData);
@@ -43,6 +46,16 @@ export const ProductDetails = () => {
     }, [id]);
 
 
+    const buttonHandler = ()=>{
+        if (!isloggedIn) {
+            toast.error("Please log into rentEasy to rent car or bike");
+            navigate("/login");
+            return;
+        }else{
+            navigate(`/checkout/${id}`);
+        }
+
+    }
     console.log(products);
     console.log(photos);
     console.log(ownerDetails);
@@ -67,7 +80,7 @@ export const ProductDetails = () => {
                 <div className="flex mt-10 items-center justify-center ml-28">
                     <div className="w-1/2 pr-4  relative">
                         <img
-                            src={`http://localhost:5000/uploads/${photos[currentImageIndex]}`}
+                            src={`http://localhost:3000/uploads/${photos[currentImageIndex]}`}
                             // alt={`${products.vehicleName} ${products.vehicleModel}`}
                             className="w-full h-auto object-cover rounded-md"
                         />
@@ -128,12 +141,13 @@ export const ProductDetails = () => {
                             </p>
                         </div>
                         <div className="flex mt-10">
-                            <Link
-                                to={`/checkout/${id}`}
+                            <button
+                                onClick={buttonHandler}
+                                // to={`/checkout/${id}`}
                                 className="bg-black text-white py-2 px-5 mr-10 rounded-md hover:bg-gray-700 focus:outline-none"
                             >
                                 Rent Now
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>

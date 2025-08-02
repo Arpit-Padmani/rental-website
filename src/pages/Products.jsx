@@ -13,11 +13,12 @@ export const Products = () => {
   const [selectedCity, setSelectedCity] = useState("all");
 
   const [products, setProducts] = useState([]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://localhost:5000/api/detail/getCarDetails')
+    fetch('http://localhost:3000/api/detail/getCarDetails')
       .then(response => response.json())
       .then(data => {
         setLoading(false);
@@ -89,7 +90,7 @@ export const Products = () => {
             {filteredProducts.map((product) => (
               <div key={product.id} className="bg-white p-4 rounded-md shadow-md">
                 <img
-                  src={`http://localhost:5000/uploads/${product.photo1}`}
+                  src={`http://localhost:3000/uploads/${product.photo1}`}
                   alt={product.name}
                   className="w-full h-52 object-cover mb-4 rounded-md"
                 />

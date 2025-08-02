@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 const Login = () => {
 
   const navigate = useNavigate();
-  const URL = "http://localhost:5000/api/auth/login";
+  const URL = "http://localhost:3000/api/auth/login";
   const [user, setUser] = useState({
     email: "",
     password: ""
@@ -26,7 +26,7 @@ const Login = () => {
   const handleLogin = async (e, req, res) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -49,7 +49,7 @@ const Login = () => {
         if (res_data.renterType == "renter") {
         window.location.href = "http://localhost:3000/"; 
         } else if(res_data.renterType == "owner") {
-          window.location.href = "http://localhost:3000/admin/profile";
+          window.location.href = "http://localhost:3001/admin/profile";
         }
       } else {
         toast.error("Login Faild !! ");

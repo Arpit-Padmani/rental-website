@@ -22,7 +22,7 @@ export default function Orders() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/orders/findByUserId", {
+                const response = await fetch("http://localhost:3000/api/orders/findByUserId", {
                     method: "POST",
                     headers: {
                         'Content-Type': "application/json"
@@ -74,7 +74,7 @@ export default function Orders() {
     const fetchCarDetails = async (carIds) => {
 
         try {
-            const response = await fetch("http://localhost:5000/api/orders/findCarDetailsBYCarId", {
+            const response = await fetch("http://localhost:3000/api/orders/findCarDetailsBYCarId", {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json"
@@ -118,7 +118,7 @@ export default function Orders() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                                 {Products.map((carDetail, index) => (
                                     <div key={index} className="bg-white p-4 rounded-md shadow-md">
-                                        <img src={`http://localhost:5000/uploads/${carDetail.photo1}`} alt={carDetail.name} className="w-full h-52 object-cover mb-4 rounded-md" />
+                                        <img src={`http://localhost:3000/uploads/${carDetail.photo1}`} alt={carDetail.name} className="w-full h-52 object-cover mb-4 rounded-md" />
                                         <h3 className="text-3xl font-semibold mb-2">{carDetail.vehicleName} - {carDetail.modelYear}</h3>
                                         <div className="text-gray-600 mb-1 flex items-baseline">
                                             <p className="text-black text-xl font-semibold mr-1">Price: </p>

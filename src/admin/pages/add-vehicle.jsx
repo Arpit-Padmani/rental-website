@@ -25,8 +25,8 @@ const AddVehicleForm = () => {
 
   const { user } = useAuth();
   useEffect(() => {
-    console.log("User:", user);
-    console.log("Setting userId:", user.userData._id);
+    // console.log("User:", user);
+    // console.log("Setting userId:", user.userData._id);
     setFormData((prevData) => ({
       ...prevData,
       userId: user.userData._id
@@ -47,10 +47,8 @@ const AddVehicleForm = () => {
       ...prevData,
       [`photo${photoNumber}`]: file,
     }));
-    console.log(file);
   };
 
-  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,14 +79,14 @@ const AddVehicleForm = () => {
     formdataToSend.append("photo1", formData.photo1);
     formdataToSend.append("photo2", formData.photo2);
     formdataToSend.append("photo3", formData.photo3);
-    console.log(formdataToSend);
+
 
     try {
-      const response = await fetch('http://localhost:5000/api/add-vehicle', {
+      const response = await fetch('http://localhost:3000/api/add-vehicle', {
         method: 'POST',
-          body: formdataToSend,
+        body: formdataToSend,
         });
-      console.log(response);
+      // console.log(response);
       const res_data = await response.json();
       console.log(res_data);
 
@@ -111,10 +109,11 @@ const AddVehicleForm = () => {
         });
       } else {
         toast.error("Failed to add vehicle detail ");
+        console.log("object");
       }
     } catch (error) {
       toast.error("Failed to add vehicle detail ");
-      console.error('Error:', error);
+      console.error(error);
     }
   };
 

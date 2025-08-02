@@ -2,17 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Checkout = () => {
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    startDate: "",
-    endDate: "",
-    numberOfDays: 0,
-  });
 
   const { id } = useParams();
   console.log(id);
@@ -27,6 +20,8 @@ const Checkout = () => {
     numberOfDays: 0,
     carId: ""
   });
+
+  const [product, setProduct] = useState({});
 
   const navigate = useNavigate();
 
@@ -53,8 +48,31 @@ const Checkout = () => {
       ...prevData,
       carId: id
     }));
+    ProductDetails()
     console.log("User:", bookingDetails);
   }, [id]);
+
+  
+  const ProductDetails = async (req, res) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/checkout/getCheckoutProduct/${id}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': "application/json"
+        },
+      });
+
+      const products = await response.json();
+      console.log(products.product);
+      setProduct(products.product);
+
+
+    } catch (error) {
+      console.log("Error in find Product in checkout details");
+    }
+  }
+  // console.log(product.startDate);
+
 
   const handleCheckout = async (req, res) => {
 
@@ -72,7 +90,7 @@ const Checkout = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/checkout/bookingDetail", {
+      const response = await fetch("http://localhost:3000/api/checkout/bookingDetail", {
         method: "POST",
         headers: {
           'Content-Type': "application/json"
@@ -84,13 +102,13 @@ const Checkout = () => {
       if (response.ok) {
         console.log(bookingDetails);
         const data = await response.json();
-        const checkoutId  = data.data._id;
+        const checkoutId = data.data._id;
 
         navigate(`/payment/${checkoutId}`);
         console.log(checkoutId);
-        
+
         console.log("data submited");
-        
+
 
       } else {
 
@@ -117,13 +135,57 @@ const Checkout = () => {
     }
   };
 
-  const handleStartDateChange = (e) => {
-    const { value } = e.target;
-    setBookingDetails((prevDetails) => ({
-      ...prevDetails,
-      startDate: value,
-      endDate: "", // Reset end date when start date changes
-    }));
+  // const isDateDisabled = (date) => {
+  //   return date >= startDate && date <= endDate;
+  // };
+  // console.log(startDate);
+
+  // const handleStartDateChange = (date) => {
+  //   if (isDateDisabled(date)) {
+  //     alert('This date is unavailable for booking.');
+  //     return;
+  //   }
+  //   setBookingDetails({
+  //     ...bookingDetails,
+  //     startDate: date,
+  //   });
+  // };
+
+  const isDateDisabled = (date) => {
+    const d = new Date(date);
+    return d >= new Date(product.startDate) && d <= new Date(product.endDate);
+  };
+
+  
+  const handleStartDateChange = (event) => {
+    const date = event.target.value;
+    if(product){
+      if (isDateDisabled(date)) {
+        alert('This date is unavailable for booking.');
+        return;
+      }
+    }
+  
+   
+    setBookingDetails({
+      ...bookingDetails,
+      startDate: date,
+    });
+  };
+
+  
+  const handleEndDateChange = (event) => {
+    const date = event.target.value;
+    if(product){
+      if (isDateDisabled(date)) {
+        alert('This date is unavailable for booking.');
+        return;
+      }
+    }
+    setBookingDetails({
+      ...bookingDetails,
+      endDate: date,
+    });
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -200,9 +262,10 @@ const Checkout = () => {
                 type="date"
                 name="startDate"
                 value={bookingDetails.startDate}
-                min={today} 
+                min={today}
                 onChange={handleStartDateChange}
                 onBlur={calculateNumberOfDays}
+                filterDate={(date) => !isDateDisabled(date)}
                 className="w-80 p-1 border rounded-md"
               />
             </div>
@@ -214,8 +277,8 @@ const Checkout = () => {
                 type="date"
                 name="endDate"
                 value={bookingDetails.endDate}
-                min={bookingDetails.startDate || today} 
-                onChange={handleBookingChange}
+                min={bookingDetails.startDate}
+                onChange={handleEndDateChange}
                 onBlur={calculateNumberOfDays}
                 className="w-80 p-1 border rounded-md"
               />

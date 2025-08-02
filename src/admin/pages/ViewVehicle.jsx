@@ -17,7 +17,7 @@ const ViewVehicle = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${id}`)
+    fetch(`http://localhost:3000/api/detail/getProduct/ProductById/${id}`)
       .then(response => response.json())
       .then(data => {
         setLoading(false);
@@ -36,7 +36,7 @@ const ViewVehicle = () => {
     try {
 
       // const userID = products.userId;
-      const response = await fetch(`http://localhost:5000/api/detail/product/delete/${products._id}`, {
+      const response = await fetch(`http://localhost:3000/api/detail/product/delete/${products._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': "application/json"
@@ -89,7 +89,7 @@ const ViewVehicle = () => {
         ):(<div className="flex mt-32 items-center justify-center ml-28">
         <div className="w-1/2 pr-4  relative">
           <img
-            src={`http://localhost:5000/uploads/${photos[currentImageIndex]}`}
+            src={`http://localhost:3000/uploads/${photos[currentImageIndex]}`}
             alt={`${products.name} ${products.model}`}
             className="w-full h-auto object-cover rounded-md"
           />

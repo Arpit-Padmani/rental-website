@@ -72,7 +72,7 @@ const Profile = () => {
         try {
             // console.log(user.userData._id);
             // console.log('Request Payload:', JSON.stringify(userData));
-            const response = await fetch(`http://localhost:5000/api/auth/user/update/${user.userData._id}`, {
+            const response = await fetch(`http://localhost:3000/api/auth/user/update/${user.userData._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type" : "application/json",

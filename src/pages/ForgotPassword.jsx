@@ -13,7 +13,7 @@ export default function ForgotPassword() {
         e.preventDefault();
         setMessage('Password reset instructions sent to your email.');
         try {
-            const response = await fetch("http://localhost:5000/api/forgot/forgotPassword", {
+            const response = await fetch("http://localhost:3000/api/forgot/forgotPassword", {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json"

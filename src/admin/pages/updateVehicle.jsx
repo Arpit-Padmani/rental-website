@@ -28,7 +28,7 @@ const UpdateVehicle = () => {
   console.log(id);
   const [data, setUser] = useState(true);
   useEffect(() => {
-    fetch(`http://localhost:5000/api/detail/getProduct/ProductById/${id}`)
+    fetch(`http://localhost:3000/api/detail/getProduct/ProductById/${id}`)
       .then(response => response.json())
       .then(data => {
         console.log(data); // Optional: Log the data received from the server
@@ -94,7 +94,7 @@ const UpdateVehicle = () => {
 
     try {
       console.log(updatedpProduct);
-      const response = await fetch(`http://localhost:5000/api/update-vehical/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/update-vehical/${id}`, {
         method: "PATCH",
       body: formdataToSend,
       });
