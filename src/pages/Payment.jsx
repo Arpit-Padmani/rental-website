@@ -163,7 +163,8 @@ const Payment = () => {
           userId: userData._id,
           carId: productId,
           paymentMethod : paymentMethod ,
-          amount : selectedAmount
+          amount : selectedAmount,
+          email : userData.email
         };
         sendPaymentData(values);
         alert(response.razorpay_payment_id);
